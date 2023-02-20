@@ -1,9 +1,12 @@
-const pRef = document.querySelector('#js-p');
+const countryRef = document.querySelector('.country');
 const inputRef = document.querySelector('#js-input');
 
-inputRef.addEventListener('blur', function (e) {
+inputRef.addEventListener('input', formHandler,700);
+
+function formHandler(e){
     fetchCountries(e.target.value)
-});
+
+}
 
 
 
@@ -12,8 +15,29 @@ function fetchCountries(name){
     
     return fetch(url)
     .then(res => res.json())
-    .then(res => pRef.src = res[0].flags.png)
+    .then(res => {
+         const item = res[0];
+        
+        countryRef.insertAdjacentHTML('beforeend',murkapHandler(item) )
+    })
+        
          
+}
+
+
+
+function murkapHandler(obj){
+
+countryRef.innerHTML = '';
+
+const title = `<li class="country__item">
+<img src="${obj.flags.png}" alt="" class="country__flag">
+<h2 class="country__title">${obj.name.common}</h2>
+<p class="country__capital">${obj.capital[0]}</p>
+<p class="country__population">${obj.population} peoples</p>
+</li>`;
+
+return title;
 }
 
 
